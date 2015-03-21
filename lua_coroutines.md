@@ -100,3 +100,39 @@ consumer(filter(producer()))
 -> 4: 16
 -> 5: 25
 ```
+
+Using the producer for a stop criteria requires that you have a snapshot in time.
+
+```lua
+function receive (it)
+	local status, value = coroutine.resume(it)
+	return value
+end
+
+function producer ()
+	return coroutine.create(function ()
+		for i = 1, 3 do
+			coroutine.yield(i)
+		end
+	end)
+end
+```
+
+So the below will give three apa since we will call the same coroutine until it gives nil.
+
+```lua
+local p = producer()
+
+while receive(p) do
+	print("apa")
+end
+```
+
+While this will give an infinite loop since we are just getting 1 over and over again since we
+are calling a new coroutine for each iteration.
+
+```lua
+while receive(producer()) do
+	print("apa")
+end
+```
