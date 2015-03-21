@@ -8,3 +8,14 @@ co = coroutine.create(function ()
 	print("I will soon be dead") 
 end)
 ```
+
+```lua
+print(coroutine.status(co))
+-> suspended
+
+coroutine.resume(co)
+-> I will soon be dead
+
+print(coroutine.status(co))
+-> dead
+```
