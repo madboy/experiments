@@ -45,6 +45,12 @@ print(coroutine.resume(co))
 
 #### Producer and consumer
 
+The next part is a minimally modified Listing 9.1 from the chapter.
+
+Let's say we have something spitting out a sequence of numbers, the `producer`. The producer is a coroutine so that each time we call it we'd get the next number. We then have a `consumer` that can use any type of producer, all it expects is that the producer is a coroutine so that `receive` can do a `coroutine.resume` to get the next number. The consumer will then take some action on the received value, in this case just printing it.
+
+This setup aslo allows us to introduce a `filter` in the chain, as long as it follows the expectation of a producer. So the filter need to be a coroutine.
+
 ```lua
 function receive (prod)
 	local status, value = coroutine.resume(prod)
