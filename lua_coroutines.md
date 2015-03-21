@@ -137,7 +137,7 @@ while receive(producer()) do
 end
 ```
 
-The small change of making `receive` return a function allows you to use it as an iteator
+The small change of making `receive` return a function allows you to use it as an iterator
 
 ```lua
 function receive (it)
