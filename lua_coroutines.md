@@ -136,3 +136,22 @@ while receive(producer()) do
 	print("apa")
 end
 ```
+
+The small change of making `receive` return a function allows you to use it as an iteator
+
+```lua
+function receive (it)
+	return function ()
+		local status, value = coroutine.resume(it)
+		return value
+	end
+end
+
+for p in receive(producer()) do
+	print(p)
+end
+
+-> 1
+-> 2
+-> 3
+```
