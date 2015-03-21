@@ -155,3 +155,44 @@ end
 -> 2
 -> 3
 ```
+
+Can this be used for anything more exiting?
+
+Let's say we want an iterator that will give us the next fibonacci number up to a given number. We first write the `fib` function so that we can get the numbers. Then all we need to do is create a receiver/iterator producer pair around that function.
+
+```lua
+function fib (n)
+	if n <= 0 then
+		return 0
+	elseif n == 1 then
+		return 1
+	else
+		return fib(n - 1) + fib(n - 2)
+	end
+end
+
+function fibonacci (n)
+	-- producer
+	local co = coroutine.create(function ()
+		for i = 0, n do
+			coroutine.yield(fib(i))
+		end
+	end)
+	-- receiver/iterator
+	return function ()
+		local status, value = coroutine.resume(co)
+		return value
+	end
+end
+
+for f in fibonacci(20) do
+	print(f)
+end
+
+-> 0
+-> 1
+-> 1
+-> ...
+-> 4181
+-> 6765
+```
