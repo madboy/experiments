@@ -220,14 +220,10 @@ The `dispatcher` will use that table to go through our coroutines in turn until 
 ```lua
 threads = {}
 
-function get_numbered (name, n)
-    print(name, ":", n)
-end
-
 function generator (name, n)
     local co = coroutine.create(function ()
         for i = 1, n do
-            coroutine.yield(get_numbered(name, i))
+            coroutine.yield(print(name, ":", i))
         end
     end)
     table.insert(threads, co)
