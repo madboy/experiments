@@ -262,3 +262,92 @@ dispatcher()
 -> io  :   3
 -> kjell   :   4
 ```
+
+#### Tail
+
+```lua
+function read_to_end (file)
+	io.input(file)
+    io.read("*a")
+end
+
+function read_line(file, filename)
+    io.input(file)
+    local line = io.read("*l")
+    if line then
+        if print_name then
+            print("--------", filename, "---------")
+        end
+        print(line)
+    end
+end
+
+files = {}
+
+print_name = false
+if #arg > 1 then print_name = true end
+
+for i = 1,#arg do
+    local f = {name=arg[i]}
+    f.file = io.open(f.name)
+    table.insert(files, f)
+end
+
+for k,f in pairs(files) do
+    read_to_end(f.file)
+end
+
+while true do
+    for k,f in pairs(files) do
+        read_line(f.file, f.name)
+    end
+end
+```
+
+```
+--------        slask   ---------
+slask: 2015-03-22 17:34:05
+--------        slask   ---------
+slask: 2015-03-22 17:34:06
+--------        slosk   ---------
+slosk: 2015-03-22 17:34:06
+```
+
+```lua
+function generator (file, filename)
+	local co = coroutine.create(function ()
+		while true do
+			io.input(file)
+			local line = io.read("*l")
+			if line then
+				if print_name then
+					print("--------", filename, "---------")
+				end
+				coroutine.yield(line)
+			else
+				coroutine.yield()
+			end
+		end
+	end)
+	table.insert(threads, co)
+end
+
+function dispatcher ()
+	while true do
+		for k, t in pairs(threads) do
+			local s, l = coroutine.resume(t)
+			if s and l then
+				print(l)
+			end
+		end
+	end
+end
+
+threads = {}
+
+for k,f in pairs(files) do
+	generator(f.file, f.name)
+end
+
+dispatcher()
+```
