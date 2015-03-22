@@ -305,6 +305,10 @@ end
 ```
 
 ```
+lua tail.lua slask slosk
+```
+
+```
 --------        slask   ---------
 slask: 2015-03-22 17:34:05
 --------        slask   ---------
