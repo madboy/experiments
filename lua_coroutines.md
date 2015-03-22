@@ -207,3 +207,62 @@ function fibonacci (n)
         end
     end)
 end
+```
+
+#### Dispatch
+
+The example of downloading files (Listing 9.4) introduces a bit too many parts for my taste. I would prefer to only focus on the dispatcher it self. So I switch getting a file to be a simple number-spitter-outer, and a name so that we can see which coroutine is currently giving us data.
+
+The `generator` sets up a coroutine that will last for n number of resumes, but instead of returning a function that resumes we insert the coroutine into a table.
+
+The `dispatcher` will use that table to go through our coroutines in turn until all of them run out. We first check if we have reached the end of the queued coroutines and if so switch back to the first one. If the first one would prove empty as well we are done and should break out of the loop. We then resume the current coroutine, and check the status afterwards. If we get false that coroutine is done and we can remove it from the queue. `table.remove` reorders the items in the table so we'll have no gaps. Last we just updatde the position in the queue to look at next.
+
+```lua
+threads = {}
+
+function get_numbered (name, n)
+    print(name, ":", n)
+end
+
+function generator (name, n)
+    local co = coroutine.create(function ()
+        for i = 1, n do
+            coroutine.yield(get_numbered(name, i))
+        end
+    end)
+    table.insert(threads, co)
+end
+
+function dispatcher ()
+    local i = 1
+    while true do
+        if threads[i] == nil then
+            if threads[1] == nil then break end
+            i = 1
+        end
+        local status, res = coroutine.resume(threads[i])
+        if status == false then
+            table.remove(threads, i)
+        end
+        i = i + 1
+    end
+end
+
+generator("eskil", 2)
+generator("kjell", 4)
+generator("io", 3)
+
+dispatcher()
+```
+
+```
+-> eskil   :   1
+-> kjell   :   1
+-> io  :   1
+-> eskil   :   2
+-> kjell   :   2
+-> io  :   2
+-> kjell   :   3
+-> io  :   3
+-> kjell   :   4
+```
