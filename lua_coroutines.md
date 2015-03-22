@@ -196,3 +196,14 @@ end
 -> 4181
 -> 6765
 ```
+
+Or even more compact using `coroutine.wrap`.
+
+```lua
+function fibonacci (n)
+    return coroutine.wrap(function ()
+        for i = 0, n do
+            coroutine.yield(fib(i))
+        end
+    end)
+end
