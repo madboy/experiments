@@ -265,9 +265,17 @@ dispatcher()
 
 #### Tail
 
+When thinking of situations where it could be good to use coroutines I thought `tail -f` might work. Setting up coroutines that would yield the last line of the file when resumed. To get some comparison I wrote an initial version that did not use coroutines at all. It:
+* collects the files given
+* reads to the end of the files
+* goes through each file in turn
+* prints last line if there is one
+
+For the coroutine I wanted something similar but the getting of the lines would instead be handled by resume, yield. It turned out a lot gnarlier than I had expected and that version doesn't really look nicer. Since we want to keep yielding forever I added an empty yield when there's no new line. We also need to check the return status of the resume so that we don't print lots of nil. I feel like I'm missing something, and I'm sure there must be a better way of writing tail using coroutines. I just cannot figure it out at the moment.
+
 ```lua
 function read_to_end (file)
-	io.input(file)
+    io.input(file)
     io.read("*a")
 end
 
@@ -305,10 +313,9 @@ end
 ```
 
 ```
-lua tail.lua slask slosk
-```
+$ lua tail.lua slask slosk
+->
 
-```
 --------        slask   ---------
 slask: 2015-03-22 17:34:05
 --------        slask   ---------
