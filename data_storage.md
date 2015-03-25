@@ -25,12 +25,6 @@ def writer(filename, lines):
 		log_text = "%s %s %s %s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
 		f = open(filename, 'a')
 		f.write(log_text)
-
-if __name__ == '__main__':
-	import sys
-	filename = sys.argv[1]
-	number_of_lines = int(sys.argv[2])
-	writer(filename, number_of_lines)
 ```
 
 For initial searching of the data, that would be a select, I just read all the lines and look for lines matching my search term.
@@ -43,12 +37,6 @@ def reader(source, search):
 	for l in s.readlines():
 		if search in l:
 			print(l)
-
-if __name__ == '__main__':
-	import sys
-	filename = sys.argv[1]
-	search = sys.argv[2]
-	reader(filename, search)
 ```
 
 ```sh
@@ -86,7 +74,7 @@ Or after growing the log a bit that does not really affect the timing that much.
 
 What we do know though is that there's been tons of updates to Djons message and we only see the last one. So if we want to see how all the messages changes over time we would still need to store all of them.
 
-Our data is now growing rapidly so we want to add an index to our log. The indexer takes one of the columns as indata, rearranges the data and the store it as a python object. When updating an existing index we would probably just take the latest changes, read up the index and update with the new data.
+Our data is now growing rapidly so we want to add an index to our log. The indexer takes one of the columns as indata, rearranges the data and then store it as a python object. When updating an existing index we would probably just take the latest changes, read up the index and update with the new data.
 
 ```python
 valid_indices = ['date', 'name', 'certainty', 'message']
