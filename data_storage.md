@@ -5,7 +5,7 @@ I really liked the talk [http://blog.confluent.io/2015/03/04/turning-the-databas
 
 To start out I want something simple that will represent the datasource, a text file. To get some data there I have a writer.
 
-```
+```python
 #!/usr/bin/env python
 
 import datetime
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 For initial searching of the data, that would be a select, I just read all the lines and look for lines matching my search term.
 
-```
+```python
 #!/usr/bin/env python
 
 def reader(source, search):
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 	reader(filename, search)
 ```
 
-```
+```sh
 $ ./reader commit_log Dijon
 ->
 ...
@@ -64,7 +64,7 @@ $ ./reader commit_log Dijon
 
 Simple enough even though I get the full log of all changes that have happened, current and old. Assuming that we would represent a regular database and all the writes to an existing row would be an update we're only interested in the last match.
 
-```
+```python
 def reader(source, search):
 	s = open(source, 'r')
 	for l in s.readlines():
@@ -74,7 +74,7 @@ def reader(source, search):
 	print match
 ```
 
-```
+```sh
 $ ./reader commit_log Dijon
 ->
 2015-03-25 19:58:04.875741 Dijon 97 sad
@@ -88,7 +88,7 @@ What we do know though is that there's been tons of updates to Djons message and
 
 Our data is now growing rapidly so we want to add an index to our log. The indexer takes one of the columns as indata, rearranges the data and the store it as a python object. When updating an existing index we would probably just take the latest changes, read up the index and update with the new data.
 
-```
+```python
 valid_indices = ['date', 'name', 'certainty', 'message']
 
 def indexer(filename, index):
@@ -117,7 +117,7 @@ def indexer(filename, index):
 
 When reading the data we now use the index file as a source and just look up the data based on the key. Unpickling data is really slow though so this is for now a lot slower than the previous version. But this experiment isn't about speed so it doesn't really matter. It's just really noticible when trying it. We can see though that the search for our data is much simpler, we don't have to go through it all. Instead we go directly to the collection of data that interest us.
 
-```
+```python
 def index_reader(source, search):
 	import pickle
 	s = open(source, 'rb')
