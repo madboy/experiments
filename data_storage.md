@@ -6,8 +6,6 @@ I really liked the talk [Turning the database inside out](http://blog.confluent.
 To start out I want something simple that will represent the datasource, a text file. To get some data there I have a writer.
 
 ```python
-#!/usr/bin/env python
-
 import datetime
 import random
 
@@ -30,8 +28,6 @@ def writer(filename, lines):
 For initial searching of the data, that would be a select, I just read all the lines and look for lines matching my search term.
 
 ```python
-#!/usr/bin/env python
-
 def reader(source, search):
 	s = open(source, 'r')
 	for l in s.readlines():
@@ -39,7 +35,7 @@ def reader(source, search):
 			print(l)
 ```
 
-```sh
+```
 $ ./reader commit_log Dijon
 ->
 ...
@@ -62,7 +58,7 @@ def reader(source, search):
 	print match
 ```
 
-```sh
+```
 $ ./reader commit_log Dijon
 ->
 2015-03-25 19:58:04.875741 Dijon 97 sad
