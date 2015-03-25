@@ -1,7 +1,7 @@
 Data storage
 ============
 
-I really liked the talk [http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/](Turning the database inside out) and the ideas discussed in there. But to get a better understanding I feel I need to get some hands on experimentation with the concepts.
+I really liked the talk [Turning the database inside out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) and the ideas discussed in there. But to get a better understanding I feel I need to get some hands on experimentation with the concepts.
 
 To start out I want something simple that will represent the datasource, a text file. To get some data there I have a writer.
 
