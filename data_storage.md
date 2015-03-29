@@ -19,9 +19,9 @@ def message():
 	return random.choice(message)
 
 def writer(filename, lines):
+	f = open(filename, 'a')
 	for i in range(lines):
 		log_text = "%s %s %s %s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
-		f = open(filename, 'a')
 		f.write(log_text)
 ```
 
