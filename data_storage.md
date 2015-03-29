@@ -51,8 +51,8 @@ Simple enough even though I get the full log of all changes that have happened, 
 ```python
 def reader(source, search):
 	s = open(source, 'r')
+    match = ""
 	for l in s.readlines():
-		match = ""
 		if search in l:
 			match = l
 	print match
