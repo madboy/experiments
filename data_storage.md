@@ -44,20 +44,19 @@ $ ./reader.py commit_log Dijon
 2015-03-25 19:58:04.875741 Dijon 97 sad
 ```
 
-Simple enough even though I get the full log of all changes that have happened, current and old. Assuming that we would represent a regular database and all the writes to an existing row would be an update we're only interested in the last match.
+Simple enough even though I get the full log of all changes that have happened, current and old. Assuming that we would represent a regular database and all the writes to an existing row would be an update we are only interested in the last match.
 
 ```python
 def reader(source, search):
-	s = open(source, 'r')
     match = ""
-	for l in s.readlines():
-		if search in l:
-			match = l
-	print match
+    for l in source.readlines():
+        if search in l:
+            match = l
+    print match.strip()
 ```
 
 ```
-$ ./reader commit_log Dijon
+$ ./reader2.py commit_log Dijon
 ->
 2015-03-25 19:58:04.875741 Dijon 97 sad
 ```
