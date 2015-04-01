@@ -10,19 +10,18 @@ import datetime
 import random
 
 users = ['Anna', 'Panna', 'Dregen', 'Apa', 'Lapa', 'Dapa', 'Dijon']
-message = ['hungry', 'content', 'happy', 'sad', 'glad', 'mad', 'drunk', 'skunker', 'sleepy', 'derpy', 'catter', 'hatter']
+messages = ['hungry', 'content', 'happy', 'sad', 'glad', 'mad', 'drunk', 'skunker', 'sleepy', 'derpy', 'catter', 'hatter']
 
 def certainty():
 	return str(random.randint(1, 100))
 
 def message():
-	return random.choice(message)
+	return random.choice(messages)
 
-def writer(filename, lines):
-	f = open(filename, 'a')
-	for i in range(lines):
-		log_text = "%s %s %s %s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
-		f.write(log_text)
+def writer(handle, lines):
+    for i in range(lines):
+        log_text = "%s %s %s %s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
+        handle.write(log_text)
 ```
 
 For initial searching of the data, that would be a select, I just read all the lines and look for lines matching my search term.
