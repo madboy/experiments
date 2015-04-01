@@ -28,14 +28,13 @@ For initial searching of the data, that would be a select, I just read all the l
 
 ```python
 def reader(source, search):
-	s = open(source, 'r')
-	for l in s.readlines():
+	for l in source.readlines():
 		if search in l:
-			print(l)
+			print(l.strip())
 ```
 
 ```
-$ ./reader commit_log Dijon
+$ ./reader.py commit_log Dijon
 ->
 ...
 2015-03-25 19:58:04.874321 Dijon 90 sleepy
