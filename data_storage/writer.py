@@ -18,7 +18,7 @@ def message():
 
 def writer(handle, lines):
     for i in range(lines):
-        log_text = "%s %s %s %s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
+        log_text = "%s\t%s\t%s\t%s\n" % (datetime.datetime.now(), random.choice(users), certainty(), message())
         handle.write(log_text)
 
 
