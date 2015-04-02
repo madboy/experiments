@@ -72,28 +72,28 @@ Our data is now growing rapidly so we want to add an index to our log. The index
 ```python
 valid_indices = ['date', 'name', 'certainty', 'message']
 
-def indexer(filename, index):
-	if valid_indices.count(index):
-		f = open(filename, 'r')
-		index_file = "%s_%s.idx" % (index, 'index')
-		i = open(index_file, 'wb')
-		idx = {}
-		for line in f.readlines():
-			cols = line.split(' ')
-			row = {'date': ' '.join(cols[0:2]),
-				'name': cols[2],
-				'certainty': cols[3],
-				'message': cols[4].rstrip()}
-			index_key = row[index]
-			if idx.get(index_key):
-				idx[index_key].append(line.strip())
-			else:
-				idx[index_key] = [line.strip()]
-		pickle.dump(idx, i)
-		i.close()
-		print("The pickling has been done")
-	else:
-		print("Invalid index key given")
+
+def indexer(source, index):
+    if valid_indices.count(index):
+        index_file = "%s_%s.idx" % (index, 'index')
+        with open(index_file, 'wb') as i:
+            idx = {}
+            for line in source.readlines():
+                cols = line.split(' ')
+                row = {'date': ' '.join(cols[0:2]),
+                       'name': cols[2],
+                       'certainty': cols[3],
+                       'message': cols[4].rstrip()}
+                index_key = row[index]
+                if idx.get(index_key):
+                    idx[index_key].append(line.strip())
+                else:
+                    idx[index_key] = [line.strip()]
+            pickle.dump(idx, i)
+            i.close()
+            print("The pickling has been done")
+    else:
+        print("Invalid index key given")
 ```
 
 When reading the data we now use the index file as a source and just look up the data based on the key. Unpickling data is really slow though so this is for now a lot slower than the previous version. But this experiment isn't about speed so it doesn't really matter. It's just really noticible when trying it. We can see though that the search for our data is much simpler, we don't have to go through it all. Instead we go directly to the collection of data that interest us.
