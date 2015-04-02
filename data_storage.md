@@ -65,9 +65,9 @@ The expectation would be that for even this simple implementation that as the lo
 
 Or after growing the log a bit that does not really affect the timing that much. So let's scratch that for now.
 
-What we do know though is that there's been tons of updates to Djons message and we only see the last one. So if we want to see how all the messages changes over time we would still need to store all of them.
+What we do know though is that there's been tons of updates to Dijons message and we only see the last one. So if we want to see how all the messages changes over time we would still need to store all of them.
 
-Our data is now growing rapidly so we want to add an index to our log. The indexer takes one of the columns as indata, rearranges the data and then store it as a python object. When updating an existing index we would probably just take the latest changes, read up the index and update with the new data.
+Our data is now growing rapidly so we want to add an index to our log. The indexer takes one of the columns as in data, rearranges the data and then store it as a python object. When updating an existing index we would probably just take the latest changes, read up the index and update with the new data.
 
 ```python
 valid_indices = ['date', 'name', 'certainty', 'message']
