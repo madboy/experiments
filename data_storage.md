@@ -100,8 +100,9 @@ When reading the data we now use the index file as a source and just look up the
 
 ```python
 def index_reader(source, search):
-	import pickle
-	s = open(source, 'rb')
-	data = pickle.load(s)
-	print data[search][-1]
+    data = pickle.load(source)
+    if search in data:
+        print data.get(search)[-1]
+    else:
+        print ''
 ```
