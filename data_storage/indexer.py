@@ -1,28 +1,31 @@
 #!/usr/bin/env python
 import pickle
 import sys
+from collections import defaultdict
 
 valid_indices = ['date', 'name', 'certainty', 'message']
+idx = defaultdict(list)
+
+
+def get_key(index, line):
+    cols = line.split(' ')
+    row = {'date': ' '.join(cols[0:2]),
+           'name': cols[2],
+           'certainty': cols[3],
+           'message': cols[4]}
+    index_key = row[index]
+    return index_key
 
 
 def indexer(source, index):
-    if valid_indices.count(index):
+    if index in valid_indices:
         index_file = "%s_%s.idx" % (index, 'index')
         with open(index_file, 'wb') as i:
-            idx = {}
             for line in source.readlines():
-                cols = line.split(' ')
-                row = {'date': ' '.join(cols[0:2]),
-                       'name': cols[2],
-                       'certainty': cols[3],
-                       'message': cols[4].rstrip()}
-                index_key = row[index]
-                if idx.get(index_key):
-                    idx[index_key].append(line.strip())
-                else:
-                    idx[index_key] = [line.strip()]
+                line = line.strip()
+                index_key = get_key(index, line)
+                idx[index_key].append(line)
             pickle.dump(idx, i)
-            i.close()
             print("The pickling has been done")
     else:
         print("Invalid index key given")
