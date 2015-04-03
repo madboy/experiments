@@ -112,3 +112,47 @@ def index_reader(source, search):
     else:
         print ''
 ```
+
+Even though speed doesn't really matter it becomes slightly annoying using pickle with bigger files. So let's run quick tests with other methods.
+
+Popular storing methods are dumping the dict as a string and reading it with `ast.literal_eval`, and using `json.dump` with `json.loads`
+
+test file
+```
+29M commit_log
+```
+
+ast.literal_eval
+```
+33M message_evalindex.idx
+
+./eval_indexer.py commit_log message  2,76s user 0,40s system 99% cpu 3,163 total
+
+./evalindex_reader.py message_evalindex.idx glad  6,32s user 1,00s system 99% cpu 7,326 total
+```
+
+json
+
+```
+33M message_jsonindex.idx
+
+./json_indexer.py commit_log message  4,45s user 0,26s system 99% cpu 4,705 total
+
+./json_reader.py message_jsonindex.idx glad  2,67s user 0,19s system 99% cpu 2,855 total
+```
+
+So even though it's slightly slower to create the index with json it's faster to read it. And since we are likely to search more than index I'll to with json.
+
+The changes to the indexer and reader are.
+
+```python
+                idx[index_key].append(line)
+            json.dump(dict(idx), i)
+            print("Index has been created")
+```
+
+```python
+def index_reader(source, search):
+    data = json.loads(source.read())
+    if search in data:
+```

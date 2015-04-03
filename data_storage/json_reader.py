@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-import pickle
 import sys
-
+import json
 
 def index_reader(source, search):
-    data = pickle.load(source)
+    data = json.loads(source.read())
     if search in data:
         print data.get(search)[-1]
     else:
