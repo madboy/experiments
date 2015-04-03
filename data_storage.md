@@ -141,18 +141,30 @@ json
 ./json_reader.py message_jsonindex.idx glad  2,67s user 0,19s system 99% cpu 2,855 total
 ```
 
-So even though it's slightly slower to create the index with json it's faster to read it. And since we are likely to search more than index I'll to with json.
+So even though it's slightly slower to create the index with json it's faster to read it. And since we are likely to search more than index I'll switch to json.
 
 The changes to the indexer and reader are.
-
-```python
-                idx[index_key].append(line)
-            json.dump(dict(idx), i)
-            print("Index has been created")
+```diff
+2d1
+< import pickle
+4a4
+> import json
+25,26c24,25
+<             pickle.dump(idx, i)
+---
+>             json.dump(dict(idx), i)
 ```
 
-```python
-def index_reader(source, search):
-    data = json.loads(source.read())
-    if search in data:
+```diff
+2d1
+< import pickle
+4c3
+< 
+---
+> import json
+7c6
+<     data = pickle.load(source)
+---
+>     data = json.loads(source.read())
 ```
+
