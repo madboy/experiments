@@ -117,12 +117,12 @@ Even though speed doesn't really matter it becomes slightly annoying using pickl
 
 Popular storing methods are dumping the dict as a string and reading it with `ast.literal_eval`, and using `json.dump` with `json.loads`
 
-test file
+For reference, the size of the test file used is:
 ```
 29M commit_log
 ```
 
-ast.literal_eval
+Just doing a dump of the dictionary as a string increases the size slightly. Below are the timings when using ast.literal_eval.
 ```
 33M message_evalindex.idx
 
@@ -131,7 +131,7 @@ ast.literal_eval
 ./evalindex_reader.py message_evalindex.idx glad  6,32s user 1,00s system 99% cpu 7,326 total
 ```
 
-json
+As we can see the json is the same size as the string dump.
 
 ```
 33M message_jsonindex.idx
@@ -159,7 +159,7 @@ The changes to the indexer and reader are.
 2d1
 < import pickle
 4c3
-< 
+<
 ---
 > import json
 7c6
