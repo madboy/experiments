@@ -159,8 +159,6 @@ The changes to the indexer and reader are.
 2d1
 < import pickle
 4c3
-<
----
 > import json
 7c6
 <     data = pickle.load(source)
@@ -168,3 +166,52 @@ The changes to the indexer and reader are.
 >     data = json.loads(source.read())
 ```
 
+#### Putting it all together
+
+Looking at the image of the unbundled DB we have most of the components already. 
+
+The writer is mostly as is. Just adding a flush, to that we get continuous updates to the log. And a optional sleep if we want to a have a delay.
+
+The replicator is a slightly modified indexer. It has support for creating multiple indexes and for knowing where in the commit_log we left off. In the example it's not tied together yet.
+
+```python
+name_view = {}
+message_view = {}
+views = {"name": name_view, "message": message_view}
+view_files = {"name": 'name_view.idx', "message": 'message_view.idx'}
+valid_indices = {'date': 0, 'name': 1, 'certainty': 2, 'message': 3}
+commit_size = 0
+
+def replication(commit_log):
+    """push data from the writer to the view"""
+    global commit_size
+    local_commit_log = commit_log
+    length = len(local_commit_log)
+    diff = length - commit_size
+    if diff != 0:
+        for row in local_commit_log[-diff:]:
+            for k, view in views.iteritems():
+                vk = get_key(valid_indices[k], row)
+                view[vk] = row
+                with open(view_files[k], 'wb') as vf:
+                    json.dump(view, vf)
+        commit_size = length
+    else:
+        print("no updates for me to look at")
+```
+
+Since the replicator has the logic for how to create the index, the view just loads it and returns a any result. This may be a bit of a misrepresentation of what is described in the article. In my setup the replicator makes sure the view has it's data, but the view does not care how the data ended up there. It's more like an endpoint you can ask for data.
+
+```python
+def view(name, search):
+    current_view = json.loads(name.read())
+    print current_view.get(search)
+```
+
+Starting all three things at the same time we can see how the view updates. We can also see failure when we try to ask the view at the same time as the replicator writes to it.
+
+```shell
+$ ./writer.py commit_log 1000 1
+$ watch -n2 ./replicator.py commit_log
+$ watch -n2 ./view.py name_view.idx Dijon
+```
