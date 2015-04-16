@@ -1,34 +1,47 @@
---local state = {}
---local ops = {}
---local op = {action=nil, preconds=nil, add_list=nil, del_list=nil}
+current_state = {}
 local l = require('list')
 
-function gps(state, goals, ops)
+function gps(goals, ops)
+    -- if every goal is achieved then solved
     for _,g in ipairs(goals) do
-        if achieve(state, g, ops) then
+        if achieve(g, ops) then
             print(g, "Is solved")
         end
     end
 end
 
 
-function achieve(state, goal, ops)
-    -- find all appropriate ops for a goal
-    for _,op in ipairs(ops) do
-        appropriate_op(state, goal, op)
+function achieve(goal, ops)
+    -- A goal is achieved if it already holds
+    -- or if there's an approriate op for it that is applicable
+    if l.member(goal, current_state) then
+        return true
+    end
+    -- some apply-op to
+    -- find-all goal ops test appropriate
+    for _,op in pairs(ops) do
+        appropriate_op(goal, op)
     end
 end
 
 function appropriate_op(goal, op)
-    for _,o in ipairs(op.add_list) do
-        if op == o then
-            return true
-        end
-    end
+    -- An op is appropriate to a goal if it is in its add list
+    -- member goal op-add-list op
+    return l.member(goal, op.add_list)
 end
 
 function apply_op(op)
+    -- Print a message and update state if op is applicable
+    -- when every achieve op-preconds op
+    --   print("executing", op-action-op
+    --   state = set-difference state (op-del-list op)
+    --   state = union state (op-add-list op)
     -- when all preconditions are met we can achieve the goal?
+    --
+    -- when we are applying an operation we can delete what's in the del-list
+    -- from the current state
+    -- but we also need to add what's in the add-list to the things that are
+    -- now the current state
 end
 
 local school_ops = {{action='drive-son-to-school',
@@ -52,5 +65,15 @@ local school_ops = {{action='drive-son-to-school',
                      add_list={'shop-has-money'},
                      del_list={'have-money'}}}
 
-local current_state = {'son-at-home', 'car-needs-battery', 'have-money', 'have-phone-book'}
-gps(current_state, {'son-at-school'}, school_ops)
+current_state = {'son-at-home', 'car-needs-battery', 'have-money', 'have-phone-book'}
+
+gps({'son-at-school'}, school_ops)
+
+-- expected
+-- executing look-up-number
+-- executing telephone-shop
+-- executing tell-shop-problem
+-- executing give-shop-money
+-- executing shop-installs-battery
+-- executing drive-son-to-school
+-- solved
