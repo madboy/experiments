@@ -53,6 +53,12 @@ function apply_op(op, ops)
         else
             print("we need to do", pc)
             achieve(pc, ops)
+            for _, v in ipairs(op.del_list) do
+                l.remove(current_state, v)
+            end
+            for _, v in ipairs(op.add_list) do
+                l.add(current_state, v)
+            end
         end
     end
 end
@@ -83,8 +89,9 @@ local school_ops = {{action='drive-son-to-school',
                      del_list={'have-money'}}}
 
 current_state = {'son-at-home', 'car-needs-battery', 'have-money', 'have-a-phone-book'}
-
+l.print(current_state)
 gps({'son-at-school'}, school_ops)
+l.print(current_state)
 
 -- expected
 -- executing look-up-number

@@ -85,6 +85,35 @@ function test_list.test_find_all_no_match()
     return t.assert_equal({}, l.find_all(el, list))
 end
 
+-- should this return a list instead?
+function test_list.test_remove()
+    local list = {1, 2, 3}
+    local el = 2
+    l.remove(list, el)
+    return t.assert_equal({1, 3}, list)
+end
+
+function test_list.test_remove_nothing_to_remove()
+    local list = {1, 2, 3}
+    local el = 4
+    l.remove(list, el)
+    return t.assert_equal({1, 2, 3}, list)
+end
+
+function test_list.test_add()
+    local list = {1, 2, 3}
+    local el = 4
+    l.add(list, el)
+    return t.assert_equal({1, 2, 3, 4}, list)
+end
+
+function test_list.test_add()
+    local list = {1, 2, 3}
+    local el = 3
+    l.add(list, el)
+    return t.assert_equal({1, 2, 3}, list)
+end
+
 t.run_tests(test_list)
 
 return test_list

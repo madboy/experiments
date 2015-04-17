@@ -46,6 +46,8 @@ function list.member(el, l)
 end
 
 function list.find_all(el, l)
+    -- find all instances of el in a list
+    -- and return them in their own list
     local result = {}
     for _,v in ipairs(l) do
         if el == v then
@@ -56,6 +58,8 @@ function list.find_all(el, l)
 end
 
 function list.compare(l1, l2)
+    -- compare two lists element by element
+    -- to determine equality
     for i,v in ipairs(l1) do
         if not (v == l2[i]) then
             return false
@@ -64,4 +68,20 @@ function list.compare(l1, l2)
     return true
 end
 
+function list.add(l, el)
+    -- add element if it's not in list
+    if not list.member(el, l) then
+        table.insert(l, el)
+    end
+end
+
+function list.remove(l, el)
+    -- remove matching element from list
+    local lc = l
+    for i,v in ipairs(lc) do
+        if v == el then
+            table.remove(l, i)
+        end
+    end
+end
 return list

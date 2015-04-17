@@ -2,3 +2,4 @@ commit_log
 .idea/*
 *.idx
 *.pyc
+*.swp
