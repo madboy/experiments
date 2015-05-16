@@ -47,6 +47,6 @@ def GPS(goal):
 
 
 GPS('son-at-school')
-if 'son-at-school' in state:
+if GPS('son-at-school'):
     print('Solved')
 print(state)
