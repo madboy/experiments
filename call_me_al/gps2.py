@@ -33,14 +33,8 @@ def GPS(goal):
     for step in nsteps:
         print("I need to do", step.action, "in order to reach my goal")
         if all(GPS(pc) == True for pc in step.preconds):
-            for a in step.add_list:
-                if a not in state:
-                    state.append(a)
-            for d in step.del_list:
-                try:
-                    state.remove(d)
-                except ValueError:
-                    pass
+            state = set().union(*[state, step.add_list])
+            state = state - set(step.del_list)
         else:
             for pc in step.preconds:
                 GPS(pc)
