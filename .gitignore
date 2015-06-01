@@ -3,3 +3,4 @@ commit_log
 *.idx
 *.pyc
 *.swp
+*.*~
