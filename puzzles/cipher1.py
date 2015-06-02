@@ -3,6 +3,7 @@
 import string
 import random
 import time
+from pprint import pprint as pp
 
 def print_cipher(ct):
     counter = 1
@@ -52,6 +53,9 @@ def decode(cipher):
             pass
     return plain_text
 
+def get_mapping():
+    return zip(alpha, map_range)
+
 alpha = string.ascii_uppercase + string.digits + string.punctuation
 alpha_len = len(alpha)
 
@@ -73,7 +77,7 @@ while True:
         encode = not encode
         print("mode is now %s" % ("encode" if encode else "decode"))
     elif text == "show secret":
-        print(map_range)
+        pp(get_mapping())
     elif text == "guess solution":
         print_cipher(create_cipher("i know the secret"))
     elif encode:
