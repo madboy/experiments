@@ -18,7 +18,17 @@ def print_cipher(ct):
             row = []
     print("\t".join(row))
 
-def create_cipher(plain):
+def add_nulls(cipher_text):
+    padding = random.randint(4,10)
+    while len(cipher_text) < row_length or ((len(cipher_text)+padding) % row_length) != 0:
+        null = random.choice(map_range[alpha_len:])
+        cipher_text.insert(random.randrange(len(cipher_text)+1), null)
+        padding -= 1
+        if padding < 0:
+            padding = 0
+    return cipher_text
+
+def encode(plain):
     plain_text = ''.join(plain.split())
     cipher_text = []
 
@@ -30,14 +40,7 @@ def create_cipher(plain):
         else:
             cipher_text.append(map_range[pos])
 
-    padding = random.randint(4,10)
-    while len(cipher_text) < 5 or ((len(cipher_text)+padding) % row_length) != 0:
-        null = random.choice(map_range[alpha_len:])
-        cipher_text.insert(random.randrange(len(cipher_text)+1), null)
-        padding -= 1
-        if padding < 0:
-            padding = 0
-    return cipher_text
+    return add_nulls(cipher_text)
 
 def decode(cipher):
     cipher_text = cipher.split(' ')
@@ -66,7 +69,7 @@ random.shuffle(map_range)
 row_length = 5
 column_width = 5
 
-encode = True
+encode_mode = True
 
 while True:
     text = raw_input("enter your text: ")
@@ -74,19 +77,19 @@ while True:
         print("Thanks! Please come again")
         break
     elif text == "change mode":
-        encode = not encode
+        encode_mode = not encode_mode
         pass
     elif text == "show secret":
         pp(get_mapping())
     elif text == "guess solution":
-        print_cipher(create_cipher("i know the secret"))
+        print_cipher(encode("i know the secret"))
     elif text == "help":
         print("some available commands are:")
         print("change mode")
         print("exit")
-    elif encode:
-        print_cipher(create_cipher(text))
-    elif not encode:
+    elif encode_mode:
+        print_cipher(encode(text))
+    elif not encode_mode:
         print(decode(text))
     else:
         print("I have no idea how to do that!")
