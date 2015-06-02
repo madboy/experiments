@@ -33,11 +33,19 @@ def encode(plain):
     cipher_text = []
 
     random.seed(time.time())
-    for c in plain_text.upper():
+    for i, c in enumerate(plain_text.upper()):
         pos = alpha.find(c)
         if pos == -1:
             cipher_text.append(random.choice(map_range[alpha_len:]))
         else:
+            # if we have more of the same character in a row we'll skip it
+            next_c = None
+            try:
+                next_c = plain_text.upper()[i+1]
+            except IndexError:
+                pass
+            if c == next_c:
+                continue
             cipher_text.append(map_range[pos])
 
     return add_nulls(cipher_text)
