@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import string
 import random
 import time
@@ -36,6 +38,10 @@ def create_cipher(plain):
             padding = 0
     return cipher_text
 
+def decode(cipher):
+    cipher_text = cipher.split(' ')
+    print("I will try to decipher this", cipher_text)
+
 alpha = string.ascii_uppercase + string.digits + string.punctuation
 alpha_len = len(alpha)
 
@@ -46,11 +52,19 @@ random.shuffle(map_range)
 row_length = 5
 column_width = 5
 
+encode = True
+
 while True:
-    plain_text = raw_input("enter your text: ")
-    if plain_text == "show secret":
+    text = raw_input("enter your text: ")
+    if text == "exit":
+        print("Thanks! Please come again")
+        break
+    elif text == "change mode":
+        encode = not encode
+        print("mode is now %s" % ("encode" if encode else "decode"))
+    elif text == "show secret":
         print(map_range)
-    elif plain_text == "guess solution":
+    elif text == "guess solution":
         print_cipher(create_cipher("i know the secret"))
     else:
         print_cipher(create_cipher(plain_text))
