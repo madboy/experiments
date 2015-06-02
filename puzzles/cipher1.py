@@ -7,17 +7,20 @@ from pprint import pprint as pp
 
 def print_cipher(ct):
     while ct:
-        print "{:2d} {:2d} {:2d} {:2d} {:2d}".format(*ct[:row_length])
-        ct[:row_length] = []
+        try:
+            print "{:2d} {:2d} {:2d} {:2d} {:2d}".format(*ct[:row_length])
+            ct[:row_length] = []
+        except IndexError:
+            print(ct)
+            break
 
 def add_nulls(cipher_text):
     padding = random.randint(4,10)
-    while len(cipher_text) < row_length or ((len(cipher_text)+padding) % row_length) != 0:
+    nulls = row_length - ((len(cipher_text) + padding) % row_length) + padding
+    print(len(cipher_text) + nulls)
+    for i in range(0, nulls):
         null = random.choice(map_range[alpha_len:])
         cipher_text.insert(random.randrange(len(cipher_text)+1), null)
-        padding -= 1
-        if padding < 0:
-            padding = 0
     return cipher_text
 
 def encode(plain):
