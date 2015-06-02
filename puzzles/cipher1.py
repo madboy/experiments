@@ -75,11 +75,15 @@ while True:
         break
     elif text == "change mode":
         encode = not encode
-        print("mode is now %s" % ("encode" if encode else "decode"))
+        pass
     elif text == "show secret":
         pp(get_mapping())
     elif text == "guess solution":
         print_cipher(create_cipher("i know the secret"))
+    elif text == "help":
+        print("some available commands are:")
+        print("change mode")
+        print("exit")
     elif encode:
         print_cipher(create_cipher(text))
     elif not encode:
