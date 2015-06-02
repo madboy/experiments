@@ -31,7 +31,7 @@ def create_cipher(plain):
             cipher_text.append(map_range[pos])
 
     padding = random.randint(4,10)
-    while ((len(cipher_text)+padding) % row_length) != 0:
+    while len(cipher_text) < 5 or ((len(cipher_text)+padding) % row_length) != 0:
         null = random.choice(map_range[alpha_len:])
         cipher_text.insert(random.randrange(len(cipher_text)+1), null)
         padding -= 1
@@ -89,4 +89,4 @@ while True:
     elif not encode:
         print(decode(text))
     else:
-        print("I have no idead how to do that!")
+        print("I have no idea how to do that!")
