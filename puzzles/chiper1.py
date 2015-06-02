@@ -40,7 +40,17 @@ def create_cipher(plain):
 
 def decode(cipher):
     cipher_text = cipher.split(' ')
-    print("I will try to decipher this", cipher_text)
+    plain_text = ""
+    for c in cipher_text:
+        try:
+            pos = map_range.index(int(c))
+        except ValueError:
+            continue
+        try:
+            plain_text += alpha[pos]
+        except IndexError:
+            pass
+    return plain_text
 
 alpha = string.ascii_uppercase + string.digits + string.punctuation
 alpha_len = len(alpha)
@@ -66,5 +76,9 @@ while True:
         print(map_range)
     elif text == "guess solution":
         print_cipher(create_cipher("i know the secret"))
+    elif encode:
+        print_cipher(create_cipher(text))
+    elif not encode:
+        print(decode(text))
     else:
-        print_cipher(create_cipher(plain_text))
+        print("I have no idead how to do that!")
