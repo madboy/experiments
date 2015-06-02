@@ -6,17 +6,9 @@ import time
 from pprint import pprint as pp
 
 def print_cipher(ct):
-    counter = 1
-    row = []
-    for c in ct:
-        row.append(str(c))
-        if counter < row_length:
-            counter += 1
-        else:
-            print("\t".join(row))
-            counter = 1
-            row = []
-    print("\t".join(row))
+    while ct:
+        print "{:2d} {:2d} {:2d} {:2d} {:2d}".format(*ct[:row_length])
+        ct[:row_length] = []
 
 def add_nulls(cipher_text):
     padding = random.randint(4,10)
