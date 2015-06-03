@@ -2,6 +2,7 @@ Puzzles for group activites
 ===========================
 
 The criterias for puzzles I'm looking for are:
+
     - suitable for group reasoning
     - attempts should be able to yield more information to help further guesses
     - possible to ask verifying questions
