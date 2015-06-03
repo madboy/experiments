@@ -81,11 +81,11 @@ while True:
     elif text == "change mode":
         encode_mode = not encode_mode
         pass
-    elif text == "show secret":
+    elif text == "show me the secret!":
         pp(get_mapping())
     elif text == "guess solution":
         print_cipher(encode("i know the secret"))
-    elif text == "help":
+    elif text.upper() == "HELP":
         print("some available commands are:")
         print("change mode")
         print("exit")
