@@ -17,7 +17,6 @@ def print_cipher(ct):
 def add_nulls(cipher_text):
     padding = random.randint(4,10)
     nulls = row_length - ((len(cipher_text) + padding) % row_length) + padding
-    print(len(cipher_text) + nulls)
     for i in range(0, nulls):
         null = random.choice(map_range[alpha_len:])
         cipher_text.insert(random.randrange(len(cipher_text)+1), null)
